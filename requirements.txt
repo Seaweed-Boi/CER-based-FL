@@ -1,0 +1,11 @@
+flwr
+torch
+opacus
+scikit-learn
+pandas
+numpy
+pyyaml
+streamlit
+matplotlib
+plotly
+pytest

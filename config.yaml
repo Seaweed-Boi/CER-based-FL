@@ -1,0 +1,54 @@
+# CER-based Federated Learning Configuration
+
+# Three experiment configurations
+configs:
+  baseline:
+    agg_method: "fedavg"
+    use_dp: false
+    attack_clients: []
+  
+  dp:
+    agg_method: "fedavg"
+    use_dp: true
+    target_epsilon: 2.0
+    target_delta: 1e-5
+    max_grad_norm: 1.0
+    attack_clients: []
+  
+  krum:
+    agg_method: "krum"
+    use_dp: false
+    attack_clients: [2]  # Client 2 is malicious
+    num_malicious: 1
+
+server:
+  address: "127.0.0.1:8080"
+  num_rounds: 10
+  min_fit_clients: 3
+  min_eval_clients: 3
+  min_available_clients: 3
+
+clients:
+  num_clients: 3
+  epochs_per_round: 5
+  batch_size: 32
+  learning_rate: 0.01
+
+data:
+  n_samples: 3000
+  n_features: 20
+  n_informative: 15
+  n_redundant: 3
+  fraud_weight: 0.1  # 10% fraud in overall dataset
+  random_state: 42
+  test_size: 0.2
+
+attack:
+  label_flip_ratio: 0.3  # Flip 30% of labels for malicious clients
+  gradient_scale: 10.0   # Scale gradients by this factor
+
+logging:
+  output_file: "logs/rounds.jsonl"
+
+# Active configuration (baseline, dp, or krum)
+active_config: "baseline"
