@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Fraud Detection AI | CER-based FL</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .animated-bg::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-50px, -50px); }
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            animation: slideDown 0.6s ease;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .logo-text h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-text p {
+            font-size: 0.85rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .header-stats {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .stat-badge {
+            text-align: center;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            border-radius: 12px;
+            border: 2px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .stat-badge .label {
+            font-size: 0.75rem;
+            color: #64748b;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-badge .value {
+            font-size: 1.25rem;
+            font-weight: 800;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            animation: fadeInUp 0.8s ease;
+        }
+
+        @keyframes fadeInUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        /* Metrics Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.8s ease;
+            animation-fill-mode: both;
+        }
+
+        .metric-card:nth-child(1) { animation-delay: 0.1s; }
+        .metric-card:nth-child(2) { animation-delay: 0.2s; }
+        .metric-card:nth-child(3) { animation-delay: 0.3s; }
+        .metric-card:nth-child(4) { animation-delay: 0.4s; }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient);
+        }
+
+        .metric-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+
+        .metric-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .metric-card:nth-child(1) .metric-icon { background: var(--gradient); }
+        .metric-card:nth-child(2) .metric-icon { background: var(--gradient-2); }
+        .metric-card:nth-child(3) .metric-icon { background: var(--gradient-3); }
+        .metric-card:nth-child(4) .metric-icon { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+
+        .metric-label {
+            font-size: 0.9rem;
+            color: #64748b;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-change {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .metric-change.positive {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        /* Charts Section */
+        .charts-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            animation: fadeInUp 1s ease;
+            animation-fill-mode: both;
+        }
+
+        .chart-card:nth-child(1) { animation-delay: 0.5s; }
+        .chart-card:nth-child(2) { animation-delay: 0.6s; }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .chart-badge {
+            padding: 0.5rem 1rem;
+            background: var(--gradient);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* Confusion Matrix */
+        .confusion-matrix {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            animation: fadeInUp 1s ease 0.7s;
+            animation-fill-mode: both;
+        }
+
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .matrix-cell {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            border: 2px solid rgba(99, 102, 241, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .matrix-cell:hover {
+            transform: scale(1.05);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.2);
+        }
+
+        .matrix-cell.header {
+            background: var(--gradient);
+            color: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .matrix-value {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .matrix-label {
+            font-size: 0.85rem;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        /* Loading Animation */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .spinner {
+            width: 80px;
+            height: 80px;
+            border: 8px solid rgba(255,255,255,0.2);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 2rem;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-stats { display: none; }
+            .charts-section { grid-template-columns: 1fr; }
+            .metrics-grid { grid-template-columns: 1fr; }
+            .hero h2 { font-size: 2rem; }
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            text-align: center;
+            margin-top: 2rem;
+            border-radius: 24px 24px 0 0;
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.1);
+        }
+
+        footer p {
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        footer strong {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <div class="loading-text">Loading AI Dashboard...</div>
+    </div>
+
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>Bank Fraud Detection AI</h1>
+                    <p>CER-based Federated Learning System</p>
+                </div>
+            </div>
+            <div class="header-stats">
+                <div class="stat-badge">
+                    <div class="label">Model Status</div>
+                    <div class="value">Active</div>
+                </div>
+                <div class="stat-badge">
+                    <div class="label">Accuracy</div>
+                    <div class="value">98.3%</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero">
+            <h2><i class="fas fa-shield-alt"></i> Advanced Fraud Detection System</h2>
+            <p>
+                Our AI-powered fraud detection model leverages deep learning and federated learning techniques 
+                to identify fraudulent transactions with <strong>98.3% accuracy</strong>. The system processes 
+                <strong>5,000 transactions</strong> with a sophisticated neural network architecture, achieving 
+                an impressive <strong>F2 score of 0.789</strong> optimized for fraud recall.
+            </p>
+        </div>
+
+        <!-- Metrics Grid -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-icon">
+                    <i class="fas fa-bullseye"></i>
+                </div>
+                <div class="metric-label">Test Accuracy</div>
+                <div class="metric-value">98.3%</div>
+                <div class="metric-change positive">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>Excellent Performance</span>
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="metric-label">F1 Score</div>
+                <div class="metric-value">0.832</div>
+                <div class="metric-change positive">
+                    <i class="fas fa-check-circle"></i>
+                    <span>High Precision</span>
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-icon">
+                    <i class="fas fa-crosshairs"></i>
+                </div>
+                <div class="metric-label">F2 Score</div>
+                <div class="metric-value">0.789</div>
+                <div class="metric-change positive">
+                    <i class="fas fa-fire"></i>
+                    <span>Optimized Recall</span>
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-icon">
+                    <i class="fas fa-percentage"></i>
+                </div>
+                <div class="metric-label">Recall Rate</div>
+                <div class="metric-value">76.4%</div>
+                <div class="metric-change positive">
+                    <i class="fas fa-shield-check"></i>
+                    <span>Fraud Detection</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-section">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3 class="chart-title"><i class="fas fa-chart-area"></i> Training Loss Evolution</h3>
+                    <span class="chart-badge">50 Epochs</span>
+                </div>
+                <canvas id="lossChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3 class="chart-title"><i class="fas fa-analytics"></i> Accuracy Comparison</h3>
+                    <span class="chart-badge">Train vs Test</span>
+                </div>
+                <canvas id="accuracyChart"></canvas>
+            </div>
+        </div>
+
+        <div class="charts-section">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3 class="chart-title"><i class="fas fa-star"></i> F1 & F2 Score Progression</h3>
+                    <span class="chart-badge">Performance Metrics</span>
+                </div>
+                <canvas id="fscoreChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3 class="chart-title"><i class="fas fa-trophy"></i> Final Performance</h3>
+                    <span class="chart-badge">Key Metrics</span>
+                </div>
+                <canvas id="metricsChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Confusion Matrix -->
+        <div class="confusion-matrix">
+            <div class="chart-header">
+                <h3 class="chart-title"><i class="fas fa-th"></i> Confusion Matrix Analysis</h3>
+                <span class="chart-badge">Detection Results</span>
+            </div>
+            <div class="matrix-grid">
+                <div class="matrix-cell header"></div>
+                <div class="matrix-cell header">Predicted Normal</div>
+                <div class="matrix-cell header">Predicted Fraud</div>
+                
+                <div class="matrix-cell header">Actual Normal</div>
+                <div class="matrix-cell">
+                    <div class="matrix-value">941</div>
+                    <div class="matrix-label">True Negatives</div>
+                </div>
+                <div class="matrix-cell">
+                    <div class="matrix-value" style="color: var(--warning);">4</div>
+                    <div class="matrix-label">False Positives</div>
+                </div>
+                
+                <div class="matrix-cell header">Actual Fraud</div>
+                <div class="matrix-cell">
+                    <div class="matrix-value" style="color: var(--danger);">13</div>
+                    <div class="matrix-label">False Negatives</div>
+                </div>
+                <div class="matrix-cell">
+                    <div class="matrix-value" style="color: var(--success);">42</div>
+                    <div class="matrix-label">True Positives</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>
+            <strong>CER-based Federated Learning</strong> • Bank Fraud Detection System • 
+            Powered by Neural Networks & Deep Learning
+        </p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+            <i class="fas fa-lock"></i> Secure • <i class="fas fa-tachometer-alt"></i> Fast • 
+            <i class="fas fa-robot"></i> AI-Powered
+        </p>
+    </footer>
+
+    <script>
+        // Global data storage
+        let metricsData = null;
+        let trainingData = null;
+
+        // Load data from API
+        async function loadData() {
+            try {
+                const [metricsResponse, trainingResponse] = await Promise.all([
+                    fetch('/api/metrics'),
+                    fetch('/api/training-history')
+                ]);
+                
+                metricsData = await metricsResponse.json();
+                trainingData = await trainingResponse.json();
+                
+                // Update UI with real data
+                updateMetrics();
+                createCharts();
+                updateConfusionMatrix();
+                
+            } catch (error) {
+                console.error('Error loading data:', error);
+            }
+        }
+
+        // Update metrics in the UI
+        function updateMetrics() {
+            if (!metricsData) return;
+            
+            // Update header stats
+            document.querySelector('.header-stats .stat-badge:nth-child(2) .value').textContent = 
+                (metricsData.final_accuracy * 100).toFixed(1) + '%';
+            
+            // Update metric cards
+            const cards = document.querySelectorAll('.metric-card');
+            cards[0].querySelector('.metric-value').textContent = 
+                (metricsData.final_accuracy * 100).toFixed(1) + '%';
+            cards[1].querySelector('.metric-value').textContent = 
+                metricsData.final_f1.toFixed(3);
+            cards[2].querySelector('.metric-value').textContent = 
+                metricsData.final_f2.toFixed(3);
+            
+            const cm = metricsData.confusion_matrix;
+            const recall = cm[1][1] / (cm[1][1] + cm[1][0]);
+            cards[3].querySelector('.metric-value').textContent = 
+                (recall * 100).toFixed(1) + '%';
+            
+            // Update hero section
+            document.querySelector('.hero h2').innerHTML = 
+                `<i class="fas fa-shield-alt"></i> Advanced Fraud Detection System`;
+            document.querySelector('.hero p').innerHTML = 
+                `Our AI-powered fraud detection model leverages deep learning and federated learning techniques 
+                to identify fraudulent transactions with <strong>${(metricsData.final_accuracy * 100).toFixed(1)}% accuracy</strong>. 
+                The system processes <strong>${metricsData.total_samples.toLocaleString()} transactions</strong> with a sophisticated 
+                neural network architecture, achieving an impressive <strong>F2 score of ${metricsData.final_f2.toFixed(3)}</strong> 
+                optimized for fraud recall.`;
+        }
+
+        // Update confusion matrix
+        function updateConfusionMatrix() {
+            if (!metricsData) return;
+            
+            const cm = metricsData.confusion_matrix;
+            const cells = document.querySelectorAll('.matrix-cell:not(.header)');
+            
+            cells[0].querySelector('.matrix-value').textContent = cm[0][0];
+            cells[1].querySelector('.matrix-value').textContent = cm[0][1];
+            cells[2].querySelector('.matrix-value').textContent = cm[1][0];
+            cells[3].querySelector('.matrix-value').textContent = cm[1][1];
+        }
+
+        // Prepare training data
+        function prepareTrainingData() {
+            const epochs = trainingData.map(d => d.epoch);
+            const trainLoss = trainingData.map(d => d.train_loss);
+            const trainAcc = trainingData.map(d => d.train_accuracy * 100);
+            const testAcc = trainingData.map(d => d.test_accuracy * 100);
+            const f1Score = trainingData.map(d => d.f1_score);
+            const f2Score = trainingData.map(d => d.f2_score);
+            
+            return { epochs, trainLoss, trainAcc, testAcc, f1Score, f2Score };
+        }
+
+        // Hide loading screen
+        window.addEventListener('load', () => {
+            loadData().then(() => {
+                setTimeout(() => {
+                    document.getElementById('loading').classList.add('hide');
+                }, 1500);
+            });
+        });
+
+        // Create all charts with real data
+        function createCharts() {
+            if (!trainingData || !metricsData) return;
+            
+            const data = prepareTrainingData();
+            
+            // Chart configurations
+            const chartConfig = {
+                responsive: true,
+                maintainAspectRatio: true,
+                aspectRatio: 2,
+                plugins: {
+                    legend: {
+                        labels: {
+                            font: { size: 12, weight: '600' },
+                            padding: 15
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        grid: { color: 'rgba(0,0,0,0.05)' },
+                        ticks: { font: { size: 11 } }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { size: 11 } }
+                    }
+                }
+            };
+
+            // Loss Chart
+            new Chart(document.getElementById('lossChart'), {
+                type: 'line',
+                data: {
+                    labels: data.epochs,
+                    datasets: [{
+                        label: 'Training Loss',
+                        data: data.trainLoss,
+                        borderColor: '#6366f1',
+                        backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: chartConfig
+            });
+
+            // Accuracy Chart
+            new Chart(document.getElementById('accuracyChart'), {
+                type: 'line',
+                data: {
+                    labels: data.epochs,
+                    datasets: [{
+                        label: 'Train Accuracy',
+                        data: data.trainAcc,
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: 'Test Accuracy',
+                        data: data.testAcc,
+                        borderColor: '#f59e0b',
+                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: chartConfig
+            });
+
+            // F-Score Chart
+            new Chart(document.getElementById('fscoreChart'), {
+                type: 'line',
+                data: {
+                    labels: data.epochs,
+                    datasets: [{
+                        label: 'F1 Score',
+                        data: data.f1Score,
+                        borderColor: '#ef4444',
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: 'F2 Score',
+                        data: data.f2Score,
+                        borderColor: '#8b5cf6',
+                        backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: chartConfig
+            });
+
+            // Metrics Bar Chart
+            const cm = metricsData.confusion_matrix;
+            const recall = cm[1][1] / (cm[1][1] + cm[1][0]);
+            
+            new Chart(document.getElementById('metricsChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Accuracy', 'F1 Score', 'F2 Score', 'Recall'],
+                    datasets: [{
+                        label: 'Score',
+                        data: [
+                            metricsData.final_accuracy,
+                            metricsData.final_f1,
+                            metricsData.final_f2,
+                            recall
+                        ],
+                        backgroundColor: [
+                            'rgba(99, 102, 241, 0.8)',
+                            'rgba(245, 158, 11, 0.8)',
+                            'rgba(16, 185, 129, 0.8)',
+                            'rgba(239, 68, 68, 0.8)'
+                        ],
+                        borderRadius: 8,
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    ...chartConfig,
+                    scales: {
+                        ...chartConfig.scales,
+                        y: {
+                            ...chartConfig.scales.y,
+                            max: 1.0
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
