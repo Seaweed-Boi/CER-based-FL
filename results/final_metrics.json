@@ -1,0 +1,21 @@
+{
+  "model_name": "Bank Fraud Detection",
+  "dataset": "bank_data.csv",
+  "total_samples": 5000,
+  "train_samples": 4000,
+  "test_samples": 1000,
+  "fraud_rate": 0.0548,
+  "final_accuracy": 0.9829999804496765,
+  "final_f1": 0.8316831683168316,
+  "final_f2": 0.7894736842105263,
+  "confusion_matrix": [
+    [
+      941,
+      4
+    ],
+    [
+      13,
+      42
+    ]
+  ]
+}
