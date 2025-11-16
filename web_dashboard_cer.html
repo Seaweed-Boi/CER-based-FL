@@ -743,10 +743,10 @@
             backdrop-filter: blur(30px) saturate(200%);
             border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 30px;
-            padding: 40px;
-            text-align: center;
+            padding: 60px 40px;
             margin-top: 30px;
             box-shadow: 0 20px 80px rgba(0, 0, 0, 0.2);
+            animation: slideInUp 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) 1.4s backwards;
         }
 
         footer p {
@@ -754,6 +754,184 @@
             font-weight: 700;
             font-size: 1.1rem;
             text-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Footer Component Cards */
+        .footer-component-card {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            animation: slideInUp 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) backwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer-component-card:nth-child(1) { animation-delay: 1.5s; }
+        .footer-component-card:nth-child(2) { animation-delay: 1.6s; }
+        .footer-component-card:nth-child(3) { animation-delay: 1.7s; }
+        .footer-component-card:nth-child(4) { animation-delay: 1.8s; }
+
+        .footer-component-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #f093fb, #4facfe);
+            background-size: 200% auto;
+            animation: gradientFlow 3s ease infinite;
+        }
+
+        .footer-component-card::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.6s ease;
+        }
+
+        .footer-component-card:hover::after {
+            width: 500px;
+            height: 500px;
+        }
+
+        .footer-component-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .footer-icon-wrapper {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .footer-component-card:hover .footer-icon-wrapper {
+            transform: rotate(360deg) scale(1.15);
+        }
+
+        .footer-formula-box {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            font-family: 'Courier New', monospace;
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .footer-component-card:hover .footer-formula-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: scale(1.02);
+        }
+
+        .footer-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+
+        .footer-component-card:hover .footer-badge {
+            transform: scale(1.1);
+        }
+
+        .footer-badge.high-impact {
+            background: rgba(67, 233, 123, 0.3);
+            border: 1px solid rgba(67, 233, 123, 0.5);
+            color: #43e97b;
+        }
+
+        .footer-badge.critical {
+            background: rgba(239, 68, 68, 0.3);
+            border: 1px solid rgba(239, 68, 68, 0.5);
+            color: #ef4444;
+        }
+
+        .footer-badge.efficiency {
+            background: rgba(245, 158, 11, 0.3);
+            border: 1px solid rgba(245, 158, 11, 0.5);
+            color: #f59e0b;
+        }
+
+        .footer-project-info {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.3), rgba(139, 92, 246, 0.3));
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: 25px;
+            padding: 40px;
+            text-align: center;
+            animation: slideInUp 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) 1.9s backwards;
+            transition: all 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer-project-info::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: rotate360 30s linear infinite;
+        }
+
+        .footer-project-info:hover {
+            transform: scale(1.02);
+            box-shadow: 0 30px 100px rgba(102, 126, 234, 0.5);
+        }
+
+        .footer-feature-badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-feature-badge:hover {
+            transform: translateX(5px);
+        }
+
+        .footer-feature-badge i {
+            font-size: 1.3rem;
+            transition: all 0.3s ease;
+        }
+
+        .footer-feature-badge:hover i {
+            transform: rotate(360deg) scale(1.2);
         }
 
         /* Responsive */
@@ -987,17 +1165,102 @@
 
         <!-- Footer -->
         <footer>
-            <p>
-                <strong>🛡️ CER-based Federated Learning Framework</strong> • Privacy-Preserving Inter-Bank Fraud Detection
-            </p>
-            <p style="margin-top: 15px; font-size: 1rem; opacity: 0.9;">
-                <i class="fas fa-lock"></i> GDPR Compliant • <i class="fas fa-users-shield"></i> Byzantine Robust • 
-                <i class="fas fa-brain"></i> Deep Learning Powered
-            </p>
-            <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.8;">
-                Track 3: Privacy-Preserving Distributed Systems | Application: Financial Fraud Detection
-            </p>
-        </footer>
+            <div style="max-width: 1400px; margin: 0 auto;">
+                <h3 style="font-size: 2rem; font-weight: 900; color: white; text-align: center; margin-bottom: 40px; text-shadow: 0 5px 30px rgba(0,0,0,0.3);">
+                    <i class="fas fa-shield-alt"></i> CER Index Components Breakdown
+                </h3>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 40px;">
+                    <!-- Global F2-Score -->
+                    <div class="footer-component-card">
+                        <div class="footer-icon-wrapper" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                            <i class="fas fa-chart-line" style="font-size: 1.8rem; color: white;"></i>
+                        </div>
+                        <h4 style="color: white; font-size: 1.3rem; font-weight: 800; margin-bottom: 15px; position: relative; z-index: 1;">Global F2-Score</h4>
+                        <div class="footer-formula-box">
+                            F2 = 5 × Precision × Recall<br/>
+                            ─────────────────────<br/>
+                            (4 × Precision) + Recall
+                        </div>
+                        <p style="color: rgba(255,255,255,0.85); font-size: 0.95rem; line-height: 1.6; margin-bottom: 15px; position: relative; z-index: 1;">
+                            Prioritizes <strong style="color: #4facfe;">Recall</strong> (β=2) because missing fraud (False Negative) is costlier than false alarms
+                        </p>
+                        <div class="footer-badge high-impact">
+                            <i class="fas fa-star"></i> High Impact
+                        </div>
+                        <p style="color: rgba(255,255,255,0.75); font-size: 0.88rem; font-style: italic; position: relative; z-index: 1;">
+                            Measures utility and steady improvement
+                        </p>
+                    </div>
+
+                    <!-- Insider Resilience Score -->
+                    <div class="footer-component-card">
+                        <div class="footer-icon-wrapper" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
+                            <i class="fas fa-shield-virus" style="font-size: 1.8rem; color: white;"></i>
+                        </div>
+                        <h4 style="color: white; font-size: 1.3rem; font-weight: 800; margin-bottom: 15px; position: relative; z-index: 1;">Insider Resilience Score</h4>
+                        <div class="footer-formula-box">
+                            Resilience = 1 - <br/>
+                            &nbsp;&nbsp;ΔLoss (attack)<br/>
+                            &nbsp;&nbsp;───────────────<br/>
+                            &nbsp;&nbsp;ΔLoss (baseline)
+                        </div>
+                        <p style="color: rgba(255,255,255,0.85); font-size: 0.95rem; line-height: 1.6; margin-bottom: 15px; position: relative; z-index: 1;">
+                            Measures model stability when 20% of clients submit malicious updates (Byzantine attacks)
+                        </p>
+                        <div class="footer-badge critical">
+                            <i class="fas fa-exclamation-triangle"></i> Critical
+                        </div>
+                        <p style="color: rgba(255,255,255,0.75); font-size: 0.88rem; font-style: italic; position: relative; z-index: 1;">
+                            Ensures trust and security
+                        </p>
+                    </div>
+
+                    <!-- Communication Cost -->
+                    <div class="footer-component-card">
+                        <div class="footer-icon-wrapper" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">
+                            <i class="fas fa-exchange-alt" style="font-size: 1.8rem; color: white;"></i>
+                        </div>
+                        <h4 style="color: white; font-size: 1.3rem; font-weight: 800; margin-bottom: 15px; position: relative; z-index: 1;">Communication Cost</h4>
+                        <div class="footer-formula-box" style="text-align: center; padding: 20px;">
+                            <p style="margin-bottom: 5px;">Total KB transferred</p>
+                            <p>across all rounds</p>
+                        </div>
+                        <p style="color: rgba(255,255,255,0.85); font-size: 0.95rem; line-height: 1.6; margin-bottom: 15px; position: relative; z-index: 1;">
+                            Lower communication overhead means faster, more efficient collaboration between banks
+                        </p>
+                        <div class="footer-badge efficiency">
+                            <i class="fas fa-bolt"></i> Efficiency
+                        </div>
+                        <p style="color: rgba(255,255,255,0.75); font-size: 0.88rem; font-style: italic; position: relative; z-index: 1;">
+                            Operational cost reduction
+                        </p>
+                    </div>
+
+                    <!-- Differential Privacy Cost -->
+                    <div class="footer-component-card">
+                        <div class="footer-icon-wrapper" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">
+                            <i class="fas fa-user-secret" style="font-size: 1.8rem; color: white;"></i>
+                        </div>
+                        <h4 style="color: white; font-size: 1.3rem; font-weight: 800; margin-bottom: 15px; position: relative; z-index: 1;">Differential Privacy Cost (ε)</h4>
+                        <div class="footer-formula-box" style="text-align: center; padding: 20px;">
+                            <p style="margin-bottom: 5px;">ε = accumulated</p>
+                            <p>privacy budget</p>
+                        </div>
+                        <p style="color: rgba(255,255,255,0.85); font-size: 0.95rem; line-height: 1.6; margin-bottom: 15px; position: relative; z-index: 1;">
+                            Lower ε = stronger privacy protection. Quantifies the privacy-utility trade-off
+                        </p>
+                        <div class="footer-badge critical">
+                            <i class="fas fa-exclamation-circle"></i> Critical
+                        </div>
+                        <p style="color: rgba(255,255,255,0.75); font-size: 0.88rem; font-style: italic; position: relative; z-index: 1;">
+                            GDPR compliance guarantee
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Project Info -->
+
     </div>
 
     <script>
